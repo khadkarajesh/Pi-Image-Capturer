@@ -1,27 +1,3 @@
-# Copyright 2017 Google Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#         http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-#!/usr/bin/env python
-
-"""Python sample for connecting to Google Cloud IoT Core via MQTT, using JWT.
-This example connects to Google Cloud IoT Core via MQTT, using a JWT for device
-authentication. After connecting, by default the device publishes 100 messages
-to the device's MQTT topic at a rate of one per second, and then exits.
-Before you run the sample, you must follow the instructions in the README
-for this sample.
-"""
-
 import argparse
 import datetime
 import os
@@ -32,7 +8,27 @@ from random import randint
 import json
 import jwt
 import paho.mqtt.client as mqtt
-# Constants that shouldn't need to be changed
+from camera import Camera
+from google.cloud import storage
+
+def publish_messages(project_id, topic_name, url):
+    publisher = pubsub_v1.PublisherClient()
+    topic_path = publisher.topic_path(project_id, topic_name)
+    publisher.publish(topic_path, url)
+    print("published data")
+    
+    
+def create_topic(project_id, topic_name):
+    publisher = pubsub_v1.PublisherClient()
+    topic_path = publisher.topic_path(project_id, topic_name)
+    topic = publisher.create_topic(topic_path)
+    print('Topic created: {}'.format(topic))
+    
+def list_topics(project_id):
+    publisher = pubsub_v1.PublisherClient()
+    project_path = publisher.project_path(project_id)
+    for topic in publisher.list_topics(project_path):
+        print(topic)             
 
 def get_ip_address():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -84,8 +80,6 @@ def error_str(rc):
 def on_connect(unused_client, unused_userdata, unused_flags, rc):
     """Callback for when a device connects."""
     print('on_connect', mqtt.connack_string(rc))
-    unused_client.subscribe("/devices/rasp/config")
-    unused_client.subscribe("/devices/rasp/commands/#", qos=1)
 
 
 def on_disconnect(unused_client, unused_userdata, rc):
@@ -95,10 +89,22 @@ def on_disconnect(unused_client, unused_userdata, rc):
 
 def on_publish(unused_client, unused_userdata, unused_mid):
     """Paho callback when a message is sent to the broker."""
-    print("onPublish", unused_userdata)
+    #print('on_publish')
     
-def on_message(unused_client, unused_userdata, msg):
-    print("on message", msg.topic +" "+ msg.payload)
+
+def on_message(unused_client, unused_userdata, message):
+        """Callback when the device receives a message on a subscription."""
+        payload = message.payload
+        print('Received message \'{}\' on topic \'{}\' with Qos {}'.format(
+            payload, message.topic, str(message.qos)))
+        if payload == 'on':
+            preview_capture()
+            url = upload_file('1.jpg','iotpractice')
+            print(url)
+            mqtt_event = '/devices/rasp3/events'
+            unused_client.publish(mqtt_event, url, qos=1)
+        else:
+            print('off')
 
 def get_client(
         project_id, cloud_region, registry_id, device_id, private_key_file,
@@ -131,17 +137,37 @@ def get_client(
     client.on_disconnect = on_disconnect
     client.on_message = on_message
 
-    
     # Connect to the Google MQTT bridge.
-    client.connect(mqtt_bridge_hostname, mqtt_bridge_port, keepalive=120, bind_address="")
-
-
-    # Start the network loop.
-    client.loop_forever()
-
+    client.connect(mqtt_bridge_hostname, mqtt_bridge_port)
+    
     return client
-# [END iot_mqtt_config]
 
+def subscribe_command_with(client, device_id):
+    mqtt_command = '/devices/{}/commands/#'.format(device_id)
+    client.subscribe(mqtt_command)
+
+def subscribe_event_with(client, device_id):
+    mqtt_event = '/devices/{}/events'.format(device_id)
+    client.subscribe(mqtt_event)
+    
+def get_camera():
+    camera = Camera()
+    return camera
+
+def preview_capture():
+    camera = get_camera()
+    camera.start_preview()
+    time.sleep(5)
+    camera.capture()
+    camera.stop_preview()
+    
+          
+def upload_file(path, bucket_name):
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket(bucket_name)
+    blob = bucket.blob(path)
+    blob.upload_from_filename(path)
+    return blob.public_url
 
 def parse_command_line_args():
     """Parse command line arguments."""
@@ -205,20 +231,15 @@ def parse_command_line_args():
 # [START iot_mqtt_run]
 def main():
     args = parse_command_line_args()
-    ip = get_ip_address()
-    hostname = socket.gethostname()
-
-    # Publish to the events or state topic based on the flag.
-    sub_topic = 'events' if args.message_type == 'event' else 'state'
-
-    mqtt_topic = '/devices/{}/{}'.format(args.device_id, sub_topic)
-
-    jwt_iat = datetime.datetime.utcnow()
-    jwt_exp_mins = args.jwt_expires_minutes
     client = get_client(
         args.project_id, args.cloud_region, args.registry_id, args.device_id,
         args.private_key_file, args.algorithm, args.ca_certs,
         args.mqtt_bridge_hostname, args.mqtt_bridge_port)
+    subscribe_command_with(client, args.device_id)  
+    # Start the network loop.
+    client.loop_forever()
+    #time.sleep(5)
+    print('Finished.')
 # [END iot_mqtt_run]
 
 
