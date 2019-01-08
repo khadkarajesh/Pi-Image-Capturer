@@ -97,9 +97,10 @@ def on_message(unused_client, unused_userdata, message):
         payload = message.payload
         print('Received message \'{}\' on topic \'{}\' with Qos {}'.format(
             payload, message.topic, str(message.qos)))
-        if payload == 'capture':
+        print(payload.decode('utf-8'))
+        if payload.decode('utf-8') == 'on':
             preview_capture()
-            url = upload_file('1.jpg','iotpractice')
+            url = upload_file('1.jpg','demo-iot')
             print(url)
             mqtt_event = '/devices/rasp3/events'
             unused_client.publish(mqtt_event, url, qos=1)
