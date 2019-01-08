@@ -97,7 +97,7 @@ def on_message(unused_client, unused_userdata, message):
         payload = message.payload
         print('Received message \'{}\' on topic \'{}\' with Qos {}'.format(
             payload, message.topic, str(message.qos)))
-        if payload == 'on':
+        if payload == 'capture':
             preview_capture()
             url = upload_file('1.jpg','iotpractice')
             print(url)
