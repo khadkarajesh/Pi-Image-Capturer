@@ -196,17 +196,6 @@ def parse_command_line_args():
             default='../.ssh/roots.pem',
             help=('CA root from https://pki.google.com/roots.pem'))
     parser.add_argument(
-            '--num_messages',
-            type=int,
-            default=100,
-            help='Number of messages to publish.')
-    parser.add_argument(
-            '--message_type',
-            choices=('event', 'state'),
-            default='event',
-            help=('Indicates whether the message to be published is a '
-                  'telemetry event or a device state message.'))
-    parser.add_argument(
             '--mqtt_bridge_hostname',
             default='mqtt.googleapis.com',
             help='MQTT bridge hostname.')
@@ -216,15 +205,6 @@ def parse_command_line_args():
             default=8883,
             type=int,
             help='MQTT bridge port.')
-    parser.add_argument(
-            '--jwt_expires_minutes',
-            default=20,
-            type=int,
-            help=('Expiration time, in minutes, for JWT tokens.'))
-    parser.add_argument(
-            '--json_data_file',
-            default='data/SampleData.json',
-            help='Sample JSON file to stream the data from.')
     return parser.parse_args()
 
 
