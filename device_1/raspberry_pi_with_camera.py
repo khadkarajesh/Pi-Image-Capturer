@@ -97,9 +97,10 @@ def on_message(unused_client, unused_userdata, message):
         payload = message.payload
         print('Received message \'{}\' on topic \'{}\' with Qos {}'.format(
             payload, message.topic, str(message.qos)))
-        if payload == 'on':
+        print(payload.decode('utf-8'))
+        if payload.decode('utf-8') == 'on':
             preview_capture()
-            url = upload_file('1.jpg','iotpractice')
+            url = upload_file('1.jpg','demo-iot')
             print(url)
             mqtt_event = '/devices/rasp3/events'
             unused_client.publish(mqtt_event, url, qos=1)
@@ -196,17 +197,6 @@ def parse_command_line_args():
             default='../.ssh/roots.pem',
             help=('CA root from https://pki.google.com/roots.pem'))
     parser.add_argument(
-            '--num_messages',
-            type=int,
-            default=100,
-            help='Number of messages to publish.')
-    parser.add_argument(
-            '--message_type',
-            choices=('event', 'state'),
-            default='event',
-            help=('Indicates whether the message to be published is a '
-                  'telemetry event or a device state message.'))
-    parser.add_argument(
             '--mqtt_bridge_hostname',
             default='mqtt.googleapis.com',
             help='MQTT bridge hostname.')
@@ -216,15 +206,6 @@ def parse_command_line_args():
             default=8883,
             type=int,
             help='MQTT bridge port.')
-    parser.add_argument(
-            '--jwt_expires_minutes',
-            default=20,
-            type=int,
-            help=('Expiration time, in minutes, for JWT tokens.'))
-    parser.add_argument(
-            '--json_data_file',
-            default='data/SampleData.json',
-            help='Sample JSON file to stream the data from.')
     return parser.parse_args()
 
 
