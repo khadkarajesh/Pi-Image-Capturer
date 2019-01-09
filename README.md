@@ -2,7 +2,11 @@
 ![Block diagram](https://github.com/rajeshkumarkhadka/iot-camera-gcp/blob/master/diagram.png)
 
 1. The server sends a request using rest api to IOT core
+<<<<<<< HEAD
 2. Google IOT core sends the capture command to the raspberry pi 
+=======
+2. Google IOT core sends the capture command to the raspberry pi 
+>>>>>>> master
 3. Raspberry pi captures an image and sends it to google storage bucket
 4. Cloud storage sends uploaded image url on successful upload
 5. The device sends image url to google cloud IOT core

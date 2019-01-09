@@ -14,8 +14,13 @@ class Camera:
         self.camera.start_preview()
 
     def capture(self):
+<<<<<<< HEAD
         self.camera.capture('/home/pi/iot_demo/1.jpg')
 
+=======
+        self.camera.capture('/home/pi/iot-camera-gcp/device_1/1.jpg')
+        
+>>>>>>> master
     def stop_preview(self):
         self.camera_state = False
         self.camera.stop_preview()
