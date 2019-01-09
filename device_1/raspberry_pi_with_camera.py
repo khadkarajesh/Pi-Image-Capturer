@@ -6,10 +6,12 @@ import socket
 import random
 from random import randint
 import json
+import sys
 import jwt
 import paho.mqtt.client as mqtt
 from camera import Camera
 from google.cloud import storage
+from pprint import pprint
 
 def publish_messages(project_id, topic_name, url):
     publisher = pubsub_v1.PublisherClient()
@@ -97,11 +99,16 @@ def on_message(unused_client, unused_userdata, message):
         payload = message.payload
         print('Received message \'{}\' on topic \'{}\' with Qos {}'.format(
             payload, message.topic, str(message.qos)))
-        if payload == 'on':
+        print(payload.decode('utf-8'))
+        if payload.decode('utf-8') == 'on':
             preview_capture()
-            url = upload_file('1.jpg','iotpractice')
+            args = parse_command_line_args()
+            print(args.device_id)
+            url = upload_file('1.jpg',args.bucket)
+            print('upload completed')
             print(url)
-            mqtt_event = '/devices/rasp3/events'
+            # rasp3: replace with your device name in your registry
+            mqtt_event = '/devices/{}/events'.format(args.device_id)
             unused_client.publish(mqtt_event, url, qos=1)
         else:
             print('off')
@@ -164,7 +171,13 @@ def preview_capture():
           
 def upload_file(path, bucket_name):
     storage_client = storage.Client()
-    bucket = storage_client.get_bucket(bucket_name)
+    pprint(path)
+    pprint(bucket_name)
+    try:
+        bucket = storage_client.get_bucket(bucket_name)
+    except Exception as e:
+        print(e)
+        
     blob = bucket.blob(path)
     blob.upload_from_filename(path)
     return blob.public_url
@@ -196,17 +209,6 @@ def parse_command_line_args():
             default='../.ssh/roots.pem',
             help=('CA root from https://pki.google.com/roots.pem'))
     parser.add_argument(
-            '--num_messages',
-            type=int,
-            default=100,
-            help='Number of messages to publish.')
-    parser.add_argument(
-            '--message_type',
-            choices=('event', 'state'),
-            default='event',
-            help=('Indicates whether the message to be published is a '
-                  'telemetry event or a device state message.'))
-    parser.add_argument(
             '--mqtt_bridge_hostname',
             default='mqtt.googleapis.com',
             help='MQTT bridge hostname.')
@@ -216,15 +218,7 @@ def parse_command_line_args():
             default=8883,
             type=int,
             help='MQTT bridge port.')
-    parser.add_argument(
-            '--jwt_expires_minutes',
-            default=20,
-            type=int,
-            help=('Expiration time, in minutes, for JWT tokens.'))
-    parser.add_argument(
-            '--json_data_file',
-            default='data/SampleData.json',
-            help='Sample JSON file to stream the data from.')
+    parser.add_argument('--bucket', required=True)
     return parser.parse_args()
 
 
