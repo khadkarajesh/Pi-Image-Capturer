@@ -102,13 +102,7 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-<<<<<<< HEAD
-device_1/rsa_private.pem
-device_1/rsa_public.pem
-=======
-rsa_private.pem
-rsa_public.pem
->>>>>>> master
+*.pem
 key.json
 
 #vs code
