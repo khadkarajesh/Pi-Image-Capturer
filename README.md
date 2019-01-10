@@ -1,6 +1,4 @@
 
-
-![Block diagram](https://github.com/rajeshkumarkhadka/iot-camera-gcp/master/overview.png)
 <img src="https://github.com/rajeshkumarkhadka/iot-camera-gcp/blob/master/overview.jpg"/>
 
 1. The server sends a request using rest api to IOT core
