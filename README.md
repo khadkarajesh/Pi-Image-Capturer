@@ -1,5 +1,6 @@
 
-![Block diagram](https://github.com/rajeshkumarkhadka/iot-camera-gcp/blob/master/diagram.png)
+
+![Block diagram](https://github.com/rajeshkumarkhadka/iot-camera-gcp/blob/master/overview.png)
 
 1. The server sends a request using rest api to IOT core
 2. Google IOT core sends the capture command to the raspberry pi 
