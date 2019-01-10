@@ -200,13 +200,13 @@ def parse_command_line_args():
     parser.add_argument(
             '--algorithm',
             choices=('RS256', 'ES256'),
-            default='ES256',
+            default='RS256',
             help='Which encryption algorithm to use to generate the JWT.')
     parser.add_argument(
             '--cloud_region', default='us-central1', help='GCP cloud region')
     parser.add_argument(
             '--ca_certs',
-            default='../.ssh/roots.pem',
+            default='roots.pem',
             help=('CA root from https://pki.google.com/roots.pem'))
     parser.add_argument(
             '--mqtt_bridge_hostname',
