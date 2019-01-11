@@ -8,7 +8,7 @@ For this example we have used Google Cloud Platform for the IoT Gateway. Here is
 <img src="https://github.com/rajeshkumarkhadka/iot-camera-gcp/blob/master/overview.jpg"/>
 
 ***
-# IoT echosystem setup
+# IoT ecosystem setup
 1. Register in Google Cloud Platform [Google Cloud Platform](https://cloud.google.com)
 2. Create project [How to create project in google platform?](https://cloud.google.com)
 3. Add registry in the poject [How to add registry in the project?](https://cloud.google.com)
