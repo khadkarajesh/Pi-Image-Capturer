@@ -18,13 +18,11 @@ class Camera:
         path =  path + file_name
         self.camera.capture(path)
         
-
     def stop_preview(self):
         self.camera_state = False
         self.camera.stop_preview()
-        self.camera.close()
         print('preview stopped')
 
-    def close_camera():
+    def close_camera(self):
         print("camera closed")
         self.camera.close()

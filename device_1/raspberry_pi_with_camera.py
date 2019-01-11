@@ -167,6 +167,7 @@ def preview_capture(path):
     time.sleep(5)
     camera.capture(path)
     camera.stop_preview()
+    camera.close_camera()
     
     
           
