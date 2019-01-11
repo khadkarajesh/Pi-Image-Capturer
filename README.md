@@ -25,26 +25,26 @@ For this example we have used Google Cloud Platform for the IoT Gateway. Here is
 **In device 1 (Raspberry pi with Pi Camera)**
 
 Run the script raspberry_pi_with_camera.py with you information
-  ```
+  ``` coffeescript
   $ python  raspberry_pi_with_camera.py  --project_id your_project_id --registry_id your_retistry_id --device_id your_device_id --private_key_file path_to_private_key --algorithm algorithm_used_to_generate_key --ca_clerts path_to_roots.pem
   ```
 
 If you have followed RS256 algorithm to generate private_key and saved private_key.pem and roots.pem inside folder device_1 then you can run only providing
-```
+```coffeescript
 $ python  raspberry_pi_with_camera.py  --project_id your_project_id --registry_id your_retistry_id --device_id your_device_id 
 ```
 
 **In device 2** 
 
 Run the script subscriber.py
-```
+``` coffeescript
 $ python  subscriber.py  --project_id your_project_id --subscription_name your_subscription_name
 ```
 
 **In Server**
 
 Run the script server.py
-```
+``` coffeescript
 $ python server.py --project_id your_project_id --service_account_json path_to_key.json --registry_id your_retistry_id --device_id your_device_id --command command_string
 ```
 
