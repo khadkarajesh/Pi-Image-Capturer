@@ -8,16 +8,17 @@ For this example we have used Google Cloud Platform for the IoT Gateway. Here is
 <img src="https://github.com/rajeshkumarkhadka/iot-camera-gcp/blob/master/overview.jpg"/>
 
 ***
-# IoT ecosystem setup
-1. [Setup raspbian](https://github.com/rajeshkumarkhadka/iot-camera-gcp/wiki/Project-Setup-in-GCP)
-2. [Project setup in Google Cloud Platform](https://github.com/rajeshkumarkhadka/iot-camera-gcp/wiki/Project-Setup-in-GCP)
-3. [Device Authentication](https://github.com/rajeshkumarkhadka/iot-camera-gcp/wiki/Device-Authentication)
-4. [Add device to registry](https://github.com/rajeshkumarkhadka/iot-camera-gcp/wiki/Add-Device-to-Registry)
+# Hardware
+1. [Raspberry Pi](https://www.raspberrypi.org/products/raspberry-pi-3-model-b-plus/)
+2. [Raspberry Pi Camera Module](https://www.raspberrypi.org/products/pi-noir-camera-v2/)
 
 ***
-# Setup/Configure Raspberry Pi and Pi camera
-1. Install Rasbian in Raspery Pi [Install Rasbian](https://cloud.google.com)
-2. Install Pi Camera [Install Pi Camera](https://cloud.google.com)
+# IoT ecosystem setup
+1. [Setup raspbian](https://github.com/rajeshkumarkhadka/iot-camera-gcp/wiki/Project-Setup-in-GCP)
+2. [Install Pi Camera](https://projects.raspberrypi.org/en/projects/getting-started-with-picamera)
+3. [Project setup in Google Cloud Platform](https://github.com/rajeshkumarkhadka/iot-camera-gcp/wiki/Project-Setup-in-GCP)
+4. [Device Authentication](https://github.com/rajeshkumarkhadka/iot-camera-gcp/wiki/Device-Authentication)
+5. [Add device to registry](https://github.com/rajeshkumarkhadka/iot-camera-gcp/wiki/Add-Device-to-Registry)
 
 *** 
 # How to run the Project?
