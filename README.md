@@ -9,10 +9,10 @@ For this example we have used Google Cloud Platform for the IoT Gateway. Here is
 
 ***
 # IoT ecosystem setup
-1. Register in Google Cloud Platform [Google Cloud Platform](https://cloud.google.com)
-2. Create project [How to create project in google platform?](https://cloud.google.com)
-3. Add registry in the poject [How to add registry in the project?](https://cloud.google.com)
-4. Add devices in the registry [How to add devices in the registry?](https://cloud.google.com)
+1. [Setup raspbian](https://github.com/rajeshkumarkhadka/iot-camera-gcp/wiki/Project-Setup-in-GCP)
+2. [Project setup in Google Cloud Platform](https://github.com/rajeshkumarkhadka/iot-camera-gcp/wiki/Project-Setup-in-GCP)
+3. [Device Authentication](https://github.com/rajeshkumarkhadka/iot-camera-gcp/wiki/Device-Authentication)
+4. [Add device to registry](https://github.com/rajeshkumarkhadka/iot-camera-gcp/wiki/Add-Device-to-Registry)
 
 ***
 # Setup/Configure Raspberry Pi and Pi camera
