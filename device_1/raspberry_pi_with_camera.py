@@ -9,7 +9,6 @@ import json
 import sys
 import jwt
 import paho.mqtt.client as mqtt
-from camera import Camera
 from google.cloud import storage
 from pprint import pprint
 
@@ -101,13 +100,10 @@ def on_message(unused_client, unused_userdata, message):
             payload, message.topic, str(message.qos)))
         print(payload.decode('utf-8'))
         if payload.decode('utf-8') == 'on':
-            preview_capture()
+            to_save_image_path = sys.path[0] + '/'    
+            preview_capture(to_save_image_path)
             args = parse_command_line_args()
-            print(args.device_id)
-            url = upload_file('1.jpg',args.bucket)
-            print('upload completed')
-            print(url)
-            # rasp3: replace with your device name in your registry
+            url = upload_file(to_save_image_path,args.bucket_name)
             mqtt_event = '/devices/{}/events'.format(args.device_id)
             unused_client.publish(mqtt_event, url, qos=1)
         else:
@@ -161,24 +157,21 @@ def get_camera():
     camera = Camera()
     return camera
 
-def preview_capture():
+def preview_capture(path):
     camera = get_camera()
     camera.start_preview()
     time.sleep(5)
-    camera.capture()
+    camera.capture(path)
     camera.stop_preview()
+    camera.close_camera()
+    
     
           
 def upload_file(path, bucket_name):
     storage_client = storage.Client()
-    pprint(path)
     pprint(bucket_name)
-    try:
-        bucket = storage_client.get_bucket(bucket_name)
-    except Exception as e:
-        print(e)
-        
-    blob = bucket.blob(path)
+    bucket = storage_client.get_bucket(bucket_name)
+    blob = bucket.blob('image/')
     blob.upload_from_filename(path)
     return blob.public_url
 
@@ -202,6 +195,7 @@ def parse_command_line_args():
             choices=('RS256', 'ES256'),
             default='RS256',
             help='Which encryption algorithm to use to generate the JWT.')
+    parser.add_argument('--bucket_name', required=True, help='Cloud Storage bucket name')
     parser.add_argument(
             '--cloud_region', default='us-central1', help='GCP cloud region')
     parser.add_argument(
@@ -218,7 +212,6 @@ def parse_command_line_args():
             default=8883,
             type=int,
             help='MQTT bridge port.')
-    parser.add_argument('--bucket', required=True)
     return parser.parse_args()
 
 

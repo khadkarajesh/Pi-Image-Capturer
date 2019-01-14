@@ -13,15 +13,16 @@ class Camera:
         self.camera_state = True
         self.camera.start_preview()
 
-    def capture(self):
-        self.camera.capture('/home/pi/iot-camera-gcp/device_1/1.jpg')
+    def capture(self, path):
+        file_name = '{}.jpg'.format(str(uuid.uuid4()))
+        path =  path + file_name
+        self.camera.capture(path)
         
     def stop_preview(self):
         self.camera_state = False
         self.camera.stop_preview()
-        self.camera.close()
         print('preview stopped')
 
-    def close_camera():
+    def close_camera(self):
         print("camera closed")
         self.camera.close()
