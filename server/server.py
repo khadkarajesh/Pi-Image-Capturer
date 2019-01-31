@@ -76,6 +76,7 @@ def parse_command_line_args():
     parser.add_argument(
         '--device_id',
         default=None,
+        required=True,
         help='Device id.')
     parser.add_argument(
         '--ec_public_key_file',
@@ -84,10 +85,12 @@ def parse_command_line_args():
     parser.add_argument(
         '--project_id',
         default=os.environ.get("GOOGLE_CLOUD_PROJECT"),
+        required=True,
         help='GCP cloud project name.')
     parser.add_argument(
         '--registry_id',
         default=default_registry,
+        required=True,
         help='Registry id. If not set, a name will be generated.')
     parser.add_argument(
         '--rsa_certificate_file',

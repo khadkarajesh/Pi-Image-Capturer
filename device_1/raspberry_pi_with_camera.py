@@ -182,6 +182,7 @@ def parse_command_line_args():
     parser.add_argument(
             '--project_id',
             default=os.environ.get('GOOGLE_CLOUD_PROJECT'),
+            required=True,
             help='GCP cloud project name')
     parser.add_argument(
             '--registry_id', required=True, help='Cloud IoT Core registry id')
